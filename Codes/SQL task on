@@ -1,15 +1,14 @@
-/*
-##I tried creating a new Database here
-CREATE DATABASE Projectss;
-USE Toba;
-GO
 
-*/
+--I tried creating a new Database here
+--CREATE DATABASE Projectss;
+--USE Toba;
+--GO
 
---DROP TABLE IF EXISTS  dbo.Projectest_1;
---DROP TABLE IF EXISTS  dbo.Project1;
 
-/*
+DROP TABLE IF EXISTS  dbo.Projectest_1;
+DROP TABLE IF EXISTS  dbo.Project1;
+
+
 CREATE TABLE dbo.Project1(
     transactions_id INT,
     sale_date DATE,
@@ -33,7 +32,7 @@ BULK INSERT dbo.Project1
                 FIELDTERMINATOR = ',',
                 TABLOCK
             );
-*/
+
 
 --WE can now Start the tasks
 

@@ -1,8 +1,64 @@
-# SQL-project-Review-1
-This was a brush on project on SQL. Just practicing and reviewing the Basics again.
+Retail Sales SQL Analysis
 
-I got the datasdet from @najirh on github.
-It is a sales Report csv files with about 10 diffrent tasks to solve. 
+Level: Beginner
+Database: TOBA
+
+This project is a practical replication and adaptation of @najirh’s Retail Sales Analysis, restructured for my own SQL learning and analysis practice. It demonstrates essential SQL concepts used by data analysts to clean, explore, and derive insights from retail sales data.
+
+🎯 Project Objectives
+
+Database Setup: Create and populate a retail sales database (TOBA) using transactional sales data.
+
+Data Cleaning: Identify and handle missing or inconsistent records to ensure data integrity.
+
+Exploratory Data Analysis (EDA): Use SQL queries to understand patterns across categories, dates, and customer segments.
+
+Business Insights: Write analytical SQL queries to answer real-world business questions such as best-selling months, customer purchasing behavior, and sales by category.
+
+Project Structure
+1️⃣ Database Setup
+
+Created a new SQL database named TOBA.
+
+Built and loaded a table (Project1) containing retail sales data with columns including:
+
+transaction_id,
+sale_date, 
+sale_time
+customer_id,
+gender,
+age,
+category,
+quantity,
+price_per_unit,
+cogs,
+total_sale
 
 
-Please note: This project might seem very basic and beginer friendly. ENJOY
+SQL Tasks & Analysis
+
+Filtered transactions by date and category.
+
+Calculated KPIs such as total and average monthly sales.
+
+Used window functions (RANK, PARTITION BY) to identify top-performing categories and months.
+
+Grouped and aggregated data to find insights on gender-based purchases and time-based sales trends.
+
+Segmented transactions into Morning, Afternoon, and Evening shifts for behavioral analysis.
+
+
+Key Learnings
+
+Practical application of aggregate and window functions.
+
+Importance of data cleaning in SQL before analysis.
+
+Use of CTEs (Common Table Expressions) for readable, modular queries.
+
+Ranking and ordering logic for analytical insights.
+
+🧠 Credits
+
+This project was inspired by and adapted from the original Retail Sales Analysis by @najirh.
+All analysis and SQL enhancements were recreated and extended for personal learning and exploration.

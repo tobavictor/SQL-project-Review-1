@@ -1,0 +1,173 @@
+/*
+##I tried creating a new Database here
+CREATE DATABASE Projectss;
+USE Toba;
+GO
+
+*/
+
+--DROP TABLE IF EXISTS  dbo.Projectest_1;
+--DROP TABLE IF EXISTS  dbo.Project1;
+
+/*
+CREATE TABLE dbo.Project1(
+    transactions_id INT,
+    sale_date DATE,
+    sale_time TIME,
+    customer_id INT,
+    gender NVARCHAR(15),
+    age INT,
+    category NVARCHAR(100),
+    quantiy INT,
+    price_per_unit FLOAT,
+    cogs FLOAT,
+    total_sale FLOAT
+    );
+
+
+
+BULK INSERT dbo.Project1
+            FROM '/var/opt/mssql/data/Project1.csv'
+            WITH(
+                FIRSTROW = 2,
+                FIELDTERMINATOR = ',',
+                TABLOCK
+            );
+*/
+
+--WE can now Start the tasks
+
+
+-- 1. Write a SQL query to retrieve all columns for sales made on '2022-11-05:
+
+
+SELECT *
+FROM Project1
+WHERE sale_date= '2022-11-05'
+
+
+
+-- 2. Write a SQL query to retrieve all transactions where the category is 'Clothing' and the quantity sold is more than 4 in the month of Nov-2022:
+
+SELECT
+    transactions_id,
+    category = 'clothing',
+    sale_date,
+    MonthName ='Nov-2022',
+    FORMAT(sale_date, 'MMM-yyyy') MonthName
+FROM Project1
+WHERE quantiy > 4
+-- I was trying to use the PARTITION BY. Please Check
+
+
+--3. Write a SQL query to calculate the total sales (total_sale) for each category.:
+
+SELECT *
+FROM(
+    SELECT
+    transactions_id,
+    total_sale,
+    category,
+    SUM(total_sale) OVER(PARTITION BY category) [Sum-Total-Sales],
+    ROW_NUMBER() OVER(PARTITION BY category ORDER BY category) AS RANK
+FROM Project1
+)t
+WHERE RANK = 1
+
+
+--4. Write a SQL query to find the average age of customers who purchased items from the 'Beauty' category.:
+
+SELECT
+    transactions_id,
+    category,
+    age,
+    AVG(age) OVER(PARTITION BY category) AvgAGE
+FROM Project1
+WHERE category = 'Beauty'
+
+
+--5. Write a SQL query to find all transactions where the total_sale is greater than 1000.:
+
+SELECT
+    transactions_id,
+    category,
+    total_sale
+FROM Project1
+WHERE total_sale >1000
+
+
+--6. Write a SQL query to find the total number of transactions (transaction_id) made by each gender in each category.
+
+SELECT 
+    gender,
+    category,
+    COUNT(transactions_id)  txidcnt
+FROM Project1
+GROUP BY gender, category
+ORDER BY gender, category
+
+--7. Write a SQL query to calculate the average sale for each month. Find out best selling month in each year
+
+SELECT *
+FROM (
+    SELECT
+        DATEPART(YEAR, sale_date) AS SalesYear,
+        DATEPART(MONTH, sale_date) AS SalesMonth,
+        CONVERT(INT, AVG(total_sale)) AS AvgMonthlySale,
+        RANK() OVER (PARTITION BY DATEPART(YEAR, sale_date) ORDER BY AVG(total_sale) DESC) AS rank
+    FROM Project1
+    GROUP BY
+       DATEPART(YEAR, sale_date),
+      DATEPART(MONTH, sale_date)
+) AS ranked
+WHERE rank = 1
+
+
+--8. Write a SQL query to find the top 5 customers based on the highest total sales
+
+SELECT TOP(5)
+    customer_id,
+    SUM(total_sale) AS TotalSales,
+    RANK() OVER (ORDER BY SUM(total_sale) DESC) AS SalesRank
+FROM Project1
+GROUP BY customer_id
+ORDER BY TotalSales DESC;
+
+
+
+--9. Write a SQL query to find the number of unique customers who purchased items from each category.:
+
+SELECT
+    COUNT(DISTINCT customer_id)AS unik,
+    category
+FROM Project1
+GROUP BY category;
+
+--10. Write a SQL query to create each shift and number of orders (Example Morning <12, Afternoon Between 12 & 17, Evening >17):
+
+
+WITH hourly_sale
+AS
+(
+SELECT *,
+    CASE
+        WHEN DATEPART(HOUR, sale_time) < 12 THEN 'Morning'
+        WHEN DATEPART(HOUR,  sale_time) BETWEEN 12 AND 17 THEN 'Afternoon'
+        ELSE 'Evening'
+    END as shift
+FROM Project1
+)
+SELECT 
+    shift,
+    COUNT(*) as total_orders    
+FROM hourly_sale
+GROUP BY shift
+
+
+/*SELECT
+sale_date,
+FORMAT(sale_time, 'HH:mm:dd tt') as date2,
+COUNT(transactions_id) OVER(PARTITION BY sale_date) as xxc,
+--DATEPART()
+sale_time
+FROM Project1*/
